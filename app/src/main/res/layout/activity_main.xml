@@ -16,4 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/tab_layout"
+        layout="@layout/tab_layout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
