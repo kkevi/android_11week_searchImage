@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.fragments.SearchFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".presentation.fragments.SearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_container"
@@ -17,19 +17,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="center">
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/search_bar_text_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:autofillHints=""
                 android:background="@drawable/outlined_textfield"
@@ -37,7 +39,6 @@
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:layout_marginEnd="8dp"
                 android:textSize="16sp" />
 
 
@@ -45,24 +46,35 @@
                 android:id="@+id/alert_btn_dialog_complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/search_button"
+                android:backgroundTint="@color/primary"
                 android:gravity="center"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:background="@drawable/search_button"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="2dp"
                 android:text="@string/search"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/primary"
                 android:textSize="20sp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/search_bar_text_field"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            android:layout_marginTop="8dp"
+             />
 
+<!--        <Space-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="170dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/main_recycler_view" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </FrameLayout>
