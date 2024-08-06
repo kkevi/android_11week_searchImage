@@ -2,9 +2,9 @@ package com.example.search_image.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ImageResultData(val response: ImageData)
+//data class ImageResultData(val response: ImageData)
 
-data class ImageData(
+data class ImageResultData(
     val documents: List<ImageDocument>,
     val meta: ImageMeta
 )

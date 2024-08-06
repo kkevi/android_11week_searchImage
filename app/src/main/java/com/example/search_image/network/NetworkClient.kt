@@ -1,11 +1,14 @@
 package com.example.search_image.network
 
 import com.example.search_image.BuildConfig
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
 
 object NetworkClient {
     private const val BASE_URL:String = "https://dapi.kakao.com/"
@@ -23,6 +26,10 @@ object NetworkClient {
             .addNetworkInterceptor(interceptor)
             .build()
     }
+
+//    val gson: Gson = GsonBuilder()
+//        .setDateFormat("yyyy-MM-dd HH:mm:ss")
+//        .create()
 
     private val searchImageRetrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

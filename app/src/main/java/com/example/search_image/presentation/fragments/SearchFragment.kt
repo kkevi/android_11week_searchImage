@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.search_image.databinding.FragmentSearchBinding
@@ -15,7 +16,7 @@ import com.example.search_image.presentation.MainViewModel
 class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private lateinit var mainAdapter: MainAdapter
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +27,20 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mainAdapter = MainAdapter()
-
         mainViewModel.communicateNetWork()
 
-        Log.d("💡💡Viewmodel? 제대로?", mainViewModel.searchQuery)
-        Log.d("\uD83D\uDCA1\uD83D\uDCA1 items?", mainViewModel.items.toString())
+        mainViewModel.itemList.observe(viewLifecycleOwner){ itm ->
+            mainAdapter.addItems(itm)
+        }
 
         mainAdapter.itemClick = object : MainAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
+                Log.d("💡💡Viewmodel? items?", mainViewModel.items.toString())
                 Log.d("클릭 했슈~", "클릭클릭")
             }
         }
@@ -54,6 +55,7 @@ class SearchFragment : Fragment() {
 //            binding.spinnerViewGoo.setItems(goo)
 //        }
     }
+
 
     companion object {
         // TODO: Rename and change types and number of parameters
