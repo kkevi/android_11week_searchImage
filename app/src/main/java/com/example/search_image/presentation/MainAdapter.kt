@@ -9,8 +9,9 @@ import com.example.search_image.databinding.MainRecylcerViewListBinding
 class MainAdapter: RecyclerView.Adapter<MainAdapter.Holder>() {
     interface ItemClick {
         fun onClick(view: View, position: Int)
-        fun onLongClick(view: View, position: Int)
+//        fun onLongClick(view: View, position: Int)
     }
+    var itemClick: ItemClick? = null
 
     inner class Holder(private val binding: MainRecylcerViewListBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivItemImage
@@ -25,17 +26,13 @@ class MainAdapter: RecyclerView.Adapter<MainAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         with(holder){
-//            itemView.setOnClickListener {
-//                itemClick?.onClick(it, position)
-//            }
-//            itemView.setOnLongClickListener{
-//                itemClick?.onLongClick(it, position)
-//                true
-//            }
+            itemView.setOnClickListener {
+                itemClick?.onClick(it, position)
+            }
 
 //            image.setImageResource()
-            title.text = "currentItem.title"
-            date.text = "currentItem.user.location"
+            title.text = "제목 $position"
+            date.text = "2024-08-05 20:00:00"
         }
 
     }

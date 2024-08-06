@@ -1,31 +1,21 @@
 package com.example.search_image.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.search_image.R
 import com.example.search_image.databinding.FragmentSearchBinding
 import com.example.search_image.presentation.MainAdapter
+import com.example.search_image.presentation.MainViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private lateinit var mainAdapter: MainAdapter
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,33 +26,46 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
         return binding.root //제발 여기 신경 좀 쓰기...
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mainAdapter = MainAdapter()
 
+        mainViewModel.communicateNetWork()
+
+        Log.d("Viewmodel? 제대로?", mainViewModel.searchQuery)
+        Log.d("items?", mainViewModel.items.toString())
+
+        mainAdapter.itemClick = object : MainAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                Log.d("클릭 했슈~", "클릭클릭")
+            }
+        }
+
         binding.mainRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter
-//            addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
         }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() =
             SearchFragment().apply {
                 arguments = Bundle().apply { }
             }
+    }
+
+    private fun setUpImageSearchParameter(query: String): HashMap<String, String> {
+        return hashMapOf(
+            "query" to query, // **required** 검색을 원하는 질의어
+            "sort" to "accuracy", // 결과 문서 정렬 방식 // accuracy: 정확도순 (default) / recency: 최신순
+            "page" to "20", // 결과 페이지 번호, 1~50 사이의 값, 기본 값 1
+            "size" to "1", // 한 페이지에 보여질 문서 수, 1~80 사이의 값, 기본 값 80
+        )
     }
 }
