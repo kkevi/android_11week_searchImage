@@ -27,8 +27,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
-        return binding.root //제발 여기 신경 좀 쓰기...
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,8 +35,8 @@ class SearchFragment : Fragment() {
 
         mainViewModel.communicateNetWork()
 
-        Log.d("Viewmodel? 제대로?", mainViewModel.searchQuery)
-        Log.d("items?", mainViewModel.items.toString())
+        Log.d("💡💡Viewmodel? 제대로?", mainViewModel.searchQuery)
+        Log.d("\uD83D\uDCA1\uD83D\uDCA1 items?", mainViewModel.items.toString())
 
         mainAdapter.itemClick = object : MainAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
@@ -49,6 +48,11 @@ class SearchFragment : Fragment() {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter
         }
+
+        // 별도 스레드에서는 UI 스레드에 있는 것들을 조작할 수 없기 때문에 아래 함수에서 조작해야함
+//        runOnUiThread {
+//            binding.spinnerViewGoo.setItems(goo)
+//        }
     }
 
     companion object {
@@ -58,14 +62,5 @@ class SearchFragment : Fragment() {
             SearchFragment().apply {
                 arguments = Bundle().apply { }
             }
-    }
-
-    private fun setUpImageSearchParameter(query: String): HashMap<String, String> {
-        return hashMapOf(
-            "query" to query, // **required** 검색을 원하는 질의어
-            "sort" to "accuracy", // 결과 문서 정렬 방식 // accuracy: 정확도순 (default) / recency: 최신순
-            "page" to "20", // 결과 페이지 번호, 1~50 사이의 값, 기본 값 1
-            "size" to "1", // 한 페이지에 보여질 문서 수, 1~80 사이의 값, 기본 값 80
-        )
     }
 }

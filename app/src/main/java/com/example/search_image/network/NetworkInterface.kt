@@ -1,11 +1,10 @@
-package com.example.search_image.retrofit
+package com.example.search_image.network
 
-import com.example.search_image.data.ImageSearchData
+import com.example.search_image.data.model.ImageResultData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 
 interface NetworkInterface {
     @GET("v2/search/image")
@@ -15,5 +14,5 @@ interface NetworkInterface {
         @Query("sort") sort : String = "accuracy",
         @Query("page") page: Int = 1,
         @Query("size") size: Int = 10
-    ): ImageSearchData
+    ): Response<ImageResultData?>
 }

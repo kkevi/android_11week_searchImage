@@ -1,4 +1,4 @@
-package com.example.search_image.retrofit
+package com.example.search_image.network
 
 import com.example.search_image.BuildConfig
 import okhttp3.OkHttpClient
