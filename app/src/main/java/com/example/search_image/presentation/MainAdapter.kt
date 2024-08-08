@@ -4,10 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.search_image.data.model.ImageDocument
 import com.example.search_image.data.model.ImageResultData
+import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.MainRecylcerViewListBinding
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -19,22 +21,23 @@ class MainAdapter(
 //    private val itemList: List<ImageDocument>
 ): RecyclerView.Adapter<MainAdapter.Holder>() {
     interface ItemClick {
-        fun onClick(view: View, position: Int)
+        fun onClickItem(position: Int, item : MyResultData)
     }
     var itemClick: ItemClick? = null
-    private val itemList = mutableListOf<ImageDocument>()
+    private val itemList = mutableListOf<MyResultData>()
 
 
-    fun addItems(itm: List<ImageDocument>){
+    fun addItems(itm: List<MyResultData>){
         val positionStart = itemList.size
         itemList.addAll(itm)
         notifyItemRangeInserted(positionStart, itm.size)
     }
 
-    inner class Holder(private val binding: MainRecylcerViewListBinding) : RecyclerView.ViewHolder(binding.root) {
+    class Holder(private val binding: MainRecylcerViewListBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivItemImage
         val title = binding.tvItemTitle
         val date = binding.tvItemDate
+        val star = binding.ivStar
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -48,13 +51,13 @@ class MainAdapter(
 
         with(holder){
             itemView.setOnClickListener {
-                itemClick?.onClick(it, position)
+                itemClick?.onClickItem(position, itemList[position])
             }
-
 
             Glide.with(itemView).load(itemList[position].thumbnailUrl).into(image)
             title.text = itemList[position].displaySitename
             date.text = timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            star.visibility = if(itemList[position].isSelected) View.VISIBLE else View.GONE
         }
 
     }

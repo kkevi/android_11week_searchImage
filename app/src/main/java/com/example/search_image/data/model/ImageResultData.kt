@@ -19,16 +19,16 @@ data class ImageMeta(
 )
 
 data class ImageDocument(
-    val collection: String, //	컬렉션
-    val datetime: String, // 미리보기 이미지 URL
+    val collection: String,
+    val datetime: String,
     @SerializedName("display_sitename")
-    val displaySitename: String, //	이미지 URL
+    val displaySitename: String,
     @SerializedName("doc_url")
-    val docUrl: String, // 이미지의 가로 길이
-    val height: Int, // 이미지의 세로 길이
+    val docUrl: String,
+    val height: Int,
     @SerializedName("image_url")
-    val imageUrl: String, // 출처
+    val imageUrl: String,
     @SerializedName("thumbnail_url")
-    val thumbnailUrl: String, //문서 URL
-    val width: Int // 문서 작성시간, ISO 8601[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].000+[tz]
+    val thumbnailUrl: String,
+    val width: Int
 )

@@ -1,6 +1,7 @@
 package com.example.search_image.presentation.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.FragmentSearchBinding
 import com.example.search_image.presentation.MainAdapter
 import com.example.search_image.presentation.MainViewModel
@@ -34,37 +36,48 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val qeuryPref : SharedPreferences = requireContext().getSharedPreferences("search_query", Context.MODE_PRIVATE)
+        val myListPref : SharedPreferences = requireContext().getSharedPreferences("my_drawer", Context.MODE_PRIVATE)
 
         mainAdapter = MainAdapter()
 
-        mainViewModel.itemList.observe(viewLifecycleOwner){ itm ->
-            mainAdapter.addItems(itm)
+        // 라이브 데이터 관찰자
+        mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
+            for(item in itemList){
+                val myResultData = MyResultData(
+                    item.datetime,
+                    item.displaySitename,
+                    item.thumbnailUrl,
+                )
+                mainAdapter.addItems(listOf(myResultData))
+            }
         }
 
+        // 검색버튼 눌렀을 때 동작하는 함수
         binding.searchButton.setOnClickListener {
-            mainViewModel.onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
-            mainViewModel.communicateNetWork()
+            with(mainViewModel){
+                onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
+                saveSearchQuery(qeuryPref, binding.searchBarTextField.text.toString())
+                communicateNetWork()
+            }
         }
 
 
         mainAdapter.itemClick = object : MainAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                Log.d("💡💡Viewmodel? items?", mainViewModel.items.toString())
-                Log.d("클릭 했슈~", "클릭클릭")
+            override fun onClickItem(position: Int, item: MyResultData) {
+                mainViewModel.selectMyList(position, item)
+                mainAdapter.notifyItemChanged(position)
             }
         }
+
+        mainViewModel.loadSearchQuery(qeuryPref, binding.searchBarTextField)
 
         binding.mainRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter
         }
 
-        // 별도 스레드에서는 UI 스레드에 있는 것들을 조작할 수 없기 때문에 아래 함수에서 조작해야함
-//        runOnUiThread {
-//            binding.spinnerViewGoo.setItems(goo)
-//        }
     }
-
 
     companion object {
         // TODO: Rename and change types and number of parameters
