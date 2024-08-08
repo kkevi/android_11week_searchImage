@@ -1,5 +1,8 @@
 package com.example.search_image.presentation
 
+import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +16,8 @@ class MainViewModel:ViewModel() {
     private val _itemList = MutableLiveData<List<ImageDocument>>()
     val itemList: LiveData<List<ImageDocument>> = _itemList
     var items = mutableListOf<ImageDocument>()
-    val searchQuery: String = "에스파"
+    var searchQuery: String = ""
+
 
     fun communicateNetWork() = viewModelScope.launch() {
         try {
@@ -22,5 +26,18 @@ class MainViewModel:ViewModel() {
         } catch (e: Exception) {
             // 에러 처리
         }
+    }
+
+    fun onSearchQeury(newText: String, inputMethodManager: InputMethodManager, view: View) {
+        searchQuery = newText
+
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0);
+        view.clearFocus()
+        Log.d("매개변수", newText)
+        Log.d("쿼리", searchQuery)
+    }
+
+    fun onSearchQeury() {
+
     }
 }

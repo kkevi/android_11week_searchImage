@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.search_image.data.model.ImageDocument
 import com.example.search_image.data.model.ImageResultData
 import com.example.search_image.databinding.MainRecylcerViewListBinding
@@ -50,7 +51,8 @@ class MainAdapter(
                 itemClick?.onClick(it, position)
             }
 
-//            image.setImageResource()
+
+            Glide.with(itemView).load(itemList[position].thumbnailUrl).into(image)
             title.text = itemList[position].displaySitename
             date.text = timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         }

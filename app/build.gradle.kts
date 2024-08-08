@@ -47,6 +47,8 @@ dependencies {
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
 
+    implementation (libs.glide)
+
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.fragment.ktx)
 

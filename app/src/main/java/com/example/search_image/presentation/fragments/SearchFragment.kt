@@ -1,12 +1,13 @@
 package com.example.search_image.presentation.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.search_image.databinding.FragmentSearchBinding
@@ -17,6 +18,7 @@ class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private lateinit var mainAdapter: MainAdapter
     private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +33,19 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         mainAdapter = MainAdapter()
-        mainViewModel.communicateNetWork()
 
         mainViewModel.itemList.observe(viewLifecycleOwner){ itm ->
             mainAdapter.addItems(itm)
         }
+
+        binding.searchButton.setOnClickListener {
+            mainViewModel.onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
+            mainViewModel.communicateNetWork()
+        }
+
 
         mainAdapter.itemClick = object : MainAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
