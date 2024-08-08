@@ -32,11 +32,9 @@ class MyDrawerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         searchAdapter = SearchAdapter()
 
-        Log.d("💡 내 보관함 itemList? 1단계 >>", mainViewModel.isSelectedList.value.toString())
-        mainViewModel.isSelectedList.observe(viewLifecycleOwner){ itemList ->
-            Log.d("💡 내 보관함 itemList 2단계 >>", itemList.toString())
-            searchAdapter.addItems(itemList)
-        }
+//        mainViewModel.isSelectedList.observe(viewLifecycleOwner){ itemList ->
+//            searchAdapter.addItems(itemList)
+//        }
         mainViewModel.loadMyDrawer()
 
 
