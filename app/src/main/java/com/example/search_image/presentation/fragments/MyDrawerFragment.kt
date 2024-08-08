@@ -1,13 +1,13 @@
 package com.example.search_image.presentation.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.FragmentMyDrawerBinding
@@ -33,19 +33,23 @@ class MyDrawerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val myListPref : SharedPreferences = requireContext().getSharedPreferences("my_drawer", Context.MODE_PRIVATE)
+
         mainAdapter = MainAdapter()
 
         with(mainViewModel){
             itemList.observe(viewLifecycleOwner){ itemList ->
-                mainAdapter.submitList(selectedList())
+                mainAdapter.submitList(selectedList.value)
             }
-            loadMyDrawer()
-        }
+            communicateNetWork()
+            loadMyDrawer(myListPref)
 
-        // 아이템 눌렀을 때 동작하는 함수
-        mainAdapter.itemClick = object : MainAdapter.ItemClick {
-            override fun onClickItem(position: Int, item: MyResultData) {
-                mainViewModel.onSelectMyList(position, item)
+
+            // 아이템 눌렀을 때 동작하는 함수
+            mainAdapter.itemClick = object : MainAdapter.ItemClick {
+                override fun onClickItem(position: Int, item: MyResultData) {
+                    unselectMyList(position, item)
+                }
             }
         }
 

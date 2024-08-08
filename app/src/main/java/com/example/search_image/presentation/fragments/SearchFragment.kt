@@ -46,30 +46,30 @@ class SearchFragment : Fragment() {
             }
             // 검색어 불러오기
             loadSearchQuery(qeuryPref, binding.searchBarTextField)
-        }
 
-
-        // 검색버튼 눌렀을 때 동작하는 함수
-        binding.searchButton.setOnClickListener {
-            with(mainViewModel){
-                onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
-                saveSearchQuery(qeuryPref, binding.searchBarTextField.text.toString())
-                communicateNetWork()
+            // 아이템 눌렀을 때 동작하는 함수
+            mainAdapter.itemClick = object : MainAdapter.ItemClick {
+                override fun onClickItem(position: Int, item: MyResultData) {
+                    selectMyList(position, item)
+                    saveMyDrawer(myListPref, selectedList.value ?: listOf())
+                }
             }
-        }
 
-        // 아이템 눌렀을 때 동작하는 함수
-        mainAdapter.itemClick = object : MainAdapter.ItemClick {
-            override fun onClickItem(position: Int, item: MyResultData) {
-                mainViewModel.selectMyList(position, item)
+            with(binding){
+                // 검색버튼 눌렀을 때 동작하는 함수
+                searchButton.setOnClickListener {
+                    onSearchQeury(searchBarTextField.text.toString(), inputMethodManager, view)
+                    saveSearchQuery(qeuryPref, searchBarTextField.text.toString())
+                    communicateNetWork()
+                }
+
+                mainRecyclerView.apply {
+                    layoutManager = GridLayoutManager(context, 2)
+                    adapter = mainAdapter
+                    mainAdapter.submitList(listOf())
+                    //  addItemDecoration(GridSpaceItemDecoration(2, 20))
+                }
             }
-        }
-
-        binding.mainRecyclerView.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            adapter = mainAdapter
-            mainAdapter.submitList(listOf())
-//            addItemDecoration(GridSpaceItemDecoration(2, 20))
         }
 
     }

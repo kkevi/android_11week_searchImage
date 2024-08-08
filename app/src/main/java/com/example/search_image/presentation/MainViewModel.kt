@@ -12,7 +12,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.search_image.data.model.ImageDocument
 import com.example.search_image.data.model.ImageResultData
 import com.example.search_image.data.model.MyResultData
+import com.example.search_image.data.model.MySavedData
 import com.example.search_image.network.NetworkClient
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.UUID
@@ -36,6 +38,11 @@ class MainViewModel:ViewModel() {
     private val _searchQuery = MutableLiveData<String>("")
     val searchQuery: LiveData<String> get() = _searchQuery
 
+    private val _selectedList = MutableLiveData<MutableList<MyResultData>>()
+    val selectedList: LiveData<MutableList<MyResultData>> = _selectedList
+
+    private val gson = Gson()
+
     fun communicateNetWork() = viewModelScope.launch() {
         try {
             val responseData: ImageResultData? = NetworkClient.searchImageNetwork.getSearchResultList(query = searchQuery.value ?: "") //내가 만들어둔 interface 호출
@@ -43,20 +50,6 @@ class MainViewModel:ViewModel() {
         } catch (e: Exception) {
             // 에러 처리
         }
-    }
-
-    fun onSearchQeury(newText: String, inputMethodManager: InputMethodManager, view: View) {
-        _searchQuery.value = newText
-
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0);
-        view.clearFocus()
-    }
-
-    fun saveSearchQuery(pref: SharedPreferences, newText: String){
-        val edit = pref.edit()
-
-        edit.putString("search_query", newText)
-        edit.apply()
     }
 
     fun selectMyList(position : Int, item: MyResultData) {
@@ -74,33 +67,48 @@ class MainViewModel:ViewModel() {
                 item.copy()
             }
         }
-    }
-
-    fun onSelectMyList(position: Int, item: MyResultData){
 //        Log.d("그냥 item", "구냥~ ${item.id}, ${item.thumbnailUrl}")
 //        Log.d("itemList", "working~ ${itemList.value?.get(position)?.id}, ${itemList.value?.get(position)?.thumbnailUrl}")
-
-        val currentList = _itemList.value?.toMutableList() ?: mutableListOf()
-        currentList.remove(item)
-        _itemList.value = currentList
+        _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
+//        itemList.value?.filter {item.isSelected}?.let { _selectedList.value?.addAll(it) }
     }
 
-    fun selectedList() : List<MyResultData> {
-        return itemList.value?.filter { it.isSelected } ?: listOf()
+    fun unselectMyList(position: Int, item: MyResultData){
+        _selectedList.value?.remove(item)
+    }
+
+    fun onSearchQeury(newText: String, inputMethodManager: InputMethodManager, view: View) {
+        _searchQuery.value = newText
+
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0);
+        view.clearFocus()
+    }
+
+    fun saveSearchQuery(pref: SharedPreferences, newText: String){
+        val edit = pref.edit()
+
+        edit.putString("search_query", newText)
+        edit.apply()
     }
 
     fun loadSearchQuery(pref: SharedPreferences, textField: EditText) {
-        textField.setText(pref.getString("search_query",""))
+        val getFromPref = pref.getString("search_query","")
+        textField.setText(getFromPref)
     }
 
-    fun saveMyDrawer(pref: SharedPreferences) {
+    fun saveMyDrawer(pref: SharedPreferences, listData: List<MyResultData>) {
         val edit = pref.edit()
+        val jsonData: String = gson.toJson(MySavedData("saved", listData)
+        )
 
-//        edit.
+        edit.putString("my_drawer", jsonData)
+        edit.apply()
     }
 
-    fun loadMyDrawer() {
+    fun loadMyDrawer(pref: SharedPreferences) {
+        val getFromPref = pref.getString("my_drawer", "[]") ?: "[]"
+        val jsonData = gson.fromJson(getFromPref, MySavedData::class.java)
 
+        _selectedList.value = jsonData.itemList.toMutableList()
     }
-
 }

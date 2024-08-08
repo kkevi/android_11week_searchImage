@@ -7,3 +7,8 @@ data class MyResultData (
     val thumbnailUrl: String,
     var isSelected: Boolean = false,
 )
+
+data class MySavedData(
+    val name: String,
+    val itemList: List<MyResultData> // 예시: 문자열 리스트
+)
