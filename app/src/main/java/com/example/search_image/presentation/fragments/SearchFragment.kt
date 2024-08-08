@@ -44,7 +44,6 @@ class SearchFragment : Fragment() {
         // 라이브 데이터 관찰자
         mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
             Log.d("observe 안에서 찍는 list>>", itemList.toString())
-//            searchAdapter
             searchAdapter.submitList(mainViewModel.itemList.value)
 
         }
@@ -56,7 +55,6 @@ class SearchFragment : Fragment() {
                 onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
                 saveSearchQuery(qeuryPref, binding.searchBarTextField.text.toString())
                 communicateNetWork()
-//                searchAdapter.submitList(mainViewModel.itemList.value)
             }
         }
 
@@ -64,7 +62,6 @@ class SearchFragment : Fragment() {
         searchAdapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClickItem(position: Int, item: MyResultData) {
                 mainViewModel.selectMyList(position, item)
-                searchAdapter.notifyItemChanged(position) // 이거 왜 안 됨
             }
         }
 

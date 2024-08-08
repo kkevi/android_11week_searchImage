@@ -13,18 +13,6 @@ import com.example.search_image.databinding.MainRecylcerViewListBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-private class DiffCallback : DiffUtil.ItemCallback<MyResultData>() {
-    override fun areItemsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
-        return oldItem == newItem
-    }
-}
-
-//class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
-
 class SearchAdapter(): ListAdapter<MyResultData, SearchAdapter.Holder>(DiffCallback()) {
     interface ItemClick {
         fun onClickItem(position: Int, item : MyResultData)
@@ -60,5 +48,15 @@ class SearchAdapter(): ListAdapter<MyResultData, SearchAdapter.Holder>(DiffCallb
             star.isVisible = item.isSelected
         }
 
+    }
+}
+
+private class DiffCallback : DiffUtil.ItemCallback<MyResultData>() {
+    override fun areItemsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
+        return oldItem == newItem
     }
 }
