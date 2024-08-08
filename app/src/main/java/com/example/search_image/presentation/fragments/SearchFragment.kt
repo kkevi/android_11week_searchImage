@@ -3,7 +3,6 @@ package com.example.search_image.presentation.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,10 +40,12 @@ class SearchFragment : Fragment() {
 
         mainAdapter = MainAdapter()
 
-        // 라이브 데이터 관찰자
-        mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
-            mainAdapter.submitList(mainViewModel.itemList.value)
-
+        with(mainViewModel){
+            itemList.observe(viewLifecycleOwner){ itemList ->
+                mainAdapter.submitList(mainViewModel.itemList.value)
+            }
+            // 검색어 불러오기
+            loadSearchQuery(qeuryPref, binding.searchBarTextField)
         }
 
 
@@ -64,13 +65,11 @@ class SearchFragment : Fragment() {
             }
         }
 
-        // 검색어 불러오기
-        mainViewModel.loadSearchQuery(qeuryPref, binding.searchBarTextField)
-
         binding.mainRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = mainAdapter
             mainAdapter.submitList(listOf())
+//            addItemDecoration(GridSpaceItemDecoration(2, 20))
         }
 
     }
@@ -84,3 +83,27 @@ class SearchFragment : Fragment() {
             }
     }
 }
+
+
+//    class GridSpaceItemDecoration(private val spanCount: Int, private val space: Int) : RecyclerView.ItemDecoration() {
+//
+//        override fun getItemOffsets(
+//            outRect: Rect,
+//            view: View,
+//            parent: RecyclerView,
+//            state: RecyclerView.State
+//        ) {
+//            val position = parent.getChildAdapterPosition(view)
+//            val column = position % spanCount + 1      // 1부터 시작
+//
+//            // 첫 행 제외하고 상단 여백 추가
+//            if (position >= spanCount) {
+//                outRect.top = space
+//            }
+//            outRect.bottom = space
+//            // 첫번째 열을 제외하고 좌측 여백 추가
+//            if (column != 1) {
+//                outRect.left = space
+//            }
+//        }
+//    }

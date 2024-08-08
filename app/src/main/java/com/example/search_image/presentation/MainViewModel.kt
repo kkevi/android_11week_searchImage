@@ -14,12 +14,14 @@ import com.example.search_image.data.model.ImageResultData
 import com.example.search_image.data.model.MyResultData
 import com.example.search_image.network.NetworkClient
 import kotlinx.coroutines.launch
+import java.util.Locale
+import java.util.UUID
 
 // 정우님이 도와주신 코드~~
 fun List<ImageDocument>.toMyData(): List<MyResultData> {
     return this.map{
         MyResultData(
-            it.imageUrl ?: "",
+            UUID.randomUUID().toString().toUpperCase(Locale.ROOT),
             it.datetime,
             it.displaySitename,
             it.thumbnailUrl,
@@ -72,6 +74,15 @@ class MainViewModel:ViewModel() {
                 item.copy()
             }
         }
+    }
+
+    fun onSelectMyList(position: Int, item: MyResultData){
+//        Log.d("그냥 item", "구냥~ ${item.id}, ${item.thumbnailUrl}")
+//        Log.d("itemList", "working~ ${itemList.value?.get(position)?.id}, ${itemList.value?.get(position)?.thumbnailUrl}")
+
+        val currentList = _itemList.value?.toMutableList() ?: mutableListOf()
+        currentList.remove(item)
+        _itemList.value = currentList
     }
 
     fun selectedList() : List<MyResultData> {

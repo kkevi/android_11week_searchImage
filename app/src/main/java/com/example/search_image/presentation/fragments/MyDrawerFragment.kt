@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.FragmentMyDrawerBinding
 import com.example.search_image.presentation.adapter.MainAdapter
 import com.example.search_image.presentation.MainViewModel
@@ -33,15 +34,20 @@ class MyDrawerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mainAdapter = MainAdapter()
-        Log.d("뿌앵 in 내 보관함~", mainViewModel.itemList.value.toString())
 
-        val selectedList = mainViewModel.selectedList()
-
-        mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
-            mainAdapter.submitList(selectedList)
+        with(mainViewModel){
+            itemList.observe(viewLifecycleOwner){ itemList ->
+                mainAdapter.submitList(selectedList())
+            }
+            loadMyDrawer()
         }
-        mainViewModel.loadMyDrawer()
 
+        // 아이템 눌렀을 때 동작하는 함수
+        mainAdapter.itemClick = object : MainAdapter.ItemClick {
+            override fun onClickItem(position: Int, item: MyResultData) {
+                mainViewModel.onSelectMyList(position, item)
+            }
+        }
 
         binding.mainRecyclerView2.apply {
             layoutManager = GridLayoutManager(context, 2)

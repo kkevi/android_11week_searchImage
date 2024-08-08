@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/iv_item_image"
-        android:layout_width="172dp"
-        android:layout_height="172dp"
+        android:layout_width="178dp"
+        android:layout_height="178dp"
         android:background="@drawable/bora_example"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
