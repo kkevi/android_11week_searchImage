@@ -30,7 +30,7 @@ class MyDrawerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        searchAdapter = SearchAdapter()
+//        searchAdapter = SearchAdapter()
 
 //        mainViewModel.isSelectedList.observe(viewLifecycleOwner){ itemList ->
 //            searchAdapter.addItems(itemList)

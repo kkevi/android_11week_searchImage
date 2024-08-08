@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 fun List<ImageDocument>.toMyData(): List<MyResultData> {
     return this.map{
         MyResultData(
+            it.imageUrl ?: "",
             it.datetime,
             it.displaySitename,
             it.thumbnailUrl,

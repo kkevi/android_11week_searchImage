@@ -1,8 +1,11 @@
 package com.example.search_image.presentation.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.search_image.data.model.MyResultData
@@ -10,18 +13,23 @@ import com.example.search_image.databinding.MainRecylcerViewListBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
+private class DiffCallback : DiffUtil.ItemCallback<MyResultData>() {
+    override fun areItemsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: MyResultData, newItem: MyResultData): Boolean {
+        return oldItem == newItem
+    }
+}
+
+//class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
+
+class SearchAdapter(): ListAdapter<MyResultData, SearchAdapter.Holder>(DiffCallback()) {
     interface ItemClick {
         fun onClickItem(position: Int, item : MyResultData)
     }
     var itemClick: ItemClick? = null
-    private val itemList = mutableListOf<MyResultData>()
-
-    fun addItems(itm: List<MyResultData>){
-        val positionStart = itemList.size
-        itemList.addAll(itm)
-        notifyItemRangeInserted(positionStart, itm.size)
-    }
 
     class Holder(private val binding: MainRecylcerViewListBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.ivItemImage
@@ -37,29 +45,20 @@ class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val timestamp = OffsetDateTime.parse(itemList[position].datetime)
+        val item = getItem(position)
+        val timestamp = OffsetDateTime.parse(item.datetime)
 
         with(holder){
             itemView.setOnClickListener {
-                itemClick?.onClickItem(position, itemList[position])
+                itemClick?.onClickItem(position, item)
                 notifyItemChanged(position)
             }
 
-            Glide.with(itemView).load(itemList[position].thumbnailUrl).into(image)
-            title.text = itemList[position].displaySitename
+            Glide.with(itemView).load(item.thumbnailUrl).into(image)
+            title.text = item.displaySitename
             date.text = timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            star.isVisible = itemList[position].isSelected
+            star.isVisible = item.isSelected
         }
 
-    }
-
-    // 아래 2개는 꼭 override 해줘야 함
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemCount(): Int {
-        // 리스트 총개수 반환
-        return itemList.size
     }
 }

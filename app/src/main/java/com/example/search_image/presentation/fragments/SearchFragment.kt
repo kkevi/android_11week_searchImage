@@ -44,7 +44,9 @@ class SearchFragment : Fragment() {
         // 라이브 데이터 관찰자
         mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
             Log.d("observe 안에서 찍는 list>>", itemList.toString())
-            searchAdapter.addItems(itemList)
+//            searchAdapter
+            searchAdapter.submitList(mainViewModel.itemList.value)
+
         }
 
 
@@ -54,6 +56,7 @@ class SearchFragment : Fragment() {
                 onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
                 saveSearchQuery(qeuryPref, binding.searchBarTextField.text.toString())
                 communicateNetWork()
+//                searchAdapter.submitList(mainViewModel.itemList.value)
             }
         }
 
@@ -71,6 +74,7 @@ class SearchFragment : Fragment() {
         binding.mainRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = searchAdapter
+            searchAdapter.submitList(listOf())
         }
 
     }
