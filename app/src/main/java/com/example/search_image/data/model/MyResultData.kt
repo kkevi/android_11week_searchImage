@@ -8,5 +8,5 @@ data class MyResultData (
     val displaySitename: String, //	이미지 URL
     @SerializedName("thumbnail_url")
     val thumbnailUrl: String, //문서 URL
-    val isSelected: Boolean = false,
+    var isSelected: Boolean = false,
 )

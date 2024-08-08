@@ -1,31 +1,21 @@
-package com.example.search_image.presentation
+package com.example.search_image.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.search_image.data.model.ImageDocument
-import com.example.search_image.data.model.ImageResultData
 import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.MainRecylcerViewListBinding
-import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.OffsetDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class MainAdapter(
-//    private val itemList: List<ImageDocument>
-): RecyclerView.Adapter<MainAdapter.Holder>() {
+class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
     interface ItemClick {
         fun onClickItem(position: Int, item : MyResultData)
     }
     var itemClick: ItemClick? = null
     private val itemList = mutableListOf<MyResultData>()
-
 
     fun addItems(itm: List<MyResultData>){
         val positionStart = itemList.size
