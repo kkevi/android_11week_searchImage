@@ -1,8 +1,8 @@
 package com.example.search_image.presentation.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.search_image.data.model.MyResultData
@@ -42,12 +42,13 @@ class SearchAdapter(): RecyclerView.Adapter<SearchAdapter.Holder>() {
         with(holder){
             itemView.setOnClickListener {
                 itemClick?.onClickItem(position, itemList[position])
+                notifyItemChanged(position)
             }
 
             Glide.with(itemView).load(itemList[position].thumbnailUrl).into(image)
             title.text = itemList[position].displaySitename
             date.text = timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            star.visibility = if(itemList[position].isSelected) View.VISIBLE else View.GONE
+            star.isVisible = itemList[position].isSelected
         }
 
     }

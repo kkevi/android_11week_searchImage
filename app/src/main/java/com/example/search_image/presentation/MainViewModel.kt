@@ -36,7 +36,6 @@ class MainViewModel:ViewModel() {
     fun communicateNetWork() = viewModelScope.launch() {
         try {
             val responseData: ImageResultData? = NetworkClient.searchImageNetwork.getSearchResultList(query = searchQuery.value ?: "") //내가 만들어둔 interface 호출
-            Log.d("responseData>>", responseData?.documents?.toMyData().toString())
             _itemList.postValue(responseData?.documents?.toMyData())
         } catch (e: Exception) {
             // 에러 처리

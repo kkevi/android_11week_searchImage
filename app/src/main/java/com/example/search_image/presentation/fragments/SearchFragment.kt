@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.FragmentSearchBinding
 import com.example.search_image.presentation.adapter.SearchAdapter
 import com.example.search_image.presentation.MainViewModel
@@ -42,15 +43,13 @@ class SearchFragment : Fragment() {
 
         // 라이브 데이터 관찰자
         mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
-            Log.d("adf>>", itemList.toString())
+            Log.d("observe 안에서 찍는 list>>", itemList.toString())
             searchAdapter.addItems(itemList)
         }
 
 
         // 검색버튼 눌렀을 때 동작하는 함수
         binding.searchButton.setOnClickListener {
-
-
             with(mainViewModel){
                 onSearchQeury(binding.searchBarTextField.text.toString(), inputMethodManager, view)
                 saveSearchQuery(qeuryPref, binding.searchBarTextField.text.toString())
@@ -58,14 +57,13 @@ class SearchFragment : Fragment() {
             }
         }
 
-
         // 아이템 눌렀을 때 동작하는 함수
-//        searchAdapter.itemClick = object : SearchAdapter.ItemClick {
-//            override fun onClickItem(position: Int, item: MyResultListData) {
-//                mainViewModel.selectMyList(position, item)
-////                Log.d("asdfasdf", item.isSelected.toString())
-//            }
-//        }
+        searchAdapter.itemClick = object : SearchAdapter.ItemClick {
+            override fun onClickItem(position: Int, item: MyResultData) {
+                mainViewModel.selectMyList(position, item)
+                searchAdapter.notifyItemChanged(position) // 이거 왜 안 됨
+            }
+        }
 
         // 검색어 불러오기
         mainViewModel.loadSearchQuery(qeuryPref, binding.searchBarTextField)
