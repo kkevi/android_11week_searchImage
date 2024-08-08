@@ -9,18 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.search_image.data.model.MyResultData
 import com.example.search_image.databinding.FragmentSearchBinding
-import com.example.search_image.presentation.adapter.SearchAdapter
+import com.example.search_image.presentation.adapter.MainAdapter
 import com.example.search_image.presentation.MainViewModel
 
 class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
-    private lateinit var searchAdapter: SearchAdapter
-    private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
-
+    private lateinit var mainAdapter: MainAdapter
+    private val mainViewModel: MainViewModel by activityViewModels<MainViewModel>()
+//    private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +39,11 @@ class SearchFragment : Fragment() {
         val qeuryPref : SharedPreferences = requireContext().getSharedPreferences("search_query", Context.MODE_PRIVATE)
         val myListPref : SharedPreferences = requireContext().getSharedPreferences("my_drawer", Context.MODE_PRIVATE)
 
-        searchAdapter = SearchAdapter()
+        mainAdapter = MainAdapter()
 
         // 라이브 데이터 관찰자
         mainViewModel.itemList.observe(viewLifecycleOwner){ itemList ->
-            Log.d("observe 안에서 찍는 list>>", itemList.toString())
-            searchAdapter.submitList(mainViewModel.itemList.value)
+            mainAdapter.submitList(mainViewModel.itemList.value)
 
         }
 
@@ -59,7 +58,7 @@ class SearchFragment : Fragment() {
         }
 
         // 아이템 눌렀을 때 동작하는 함수
-        searchAdapter.itemClick = object : SearchAdapter.ItemClick {
+        mainAdapter.itemClick = object : MainAdapter.ItemClick {
             override fun onClickItem(position: Int, item: MyResultData) {
                 mainViewModel.selectMyList(position, item)
             }
@@ -70,8 +69,8 @@ class SearchFragment : Fragment() {
 
         binding.mainRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
-            adapter = searchAdapter
-            searchAdapter.submitList(listOf())
+            adapter = mainAdapter
+            mainAdapter.submitList(listOf())
         }
 
     }

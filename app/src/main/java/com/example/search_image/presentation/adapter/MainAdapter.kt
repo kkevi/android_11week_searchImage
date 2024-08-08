@@ -13,7 +13,7 @@ import com.example.search_image.databinding.MainRecylcerViewListBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-class SearchAdapter(): ListAdapter<MyResultData, SearchAdapter.Holder>(DiffCallback()) {
+class MainAdapter(): ListAdapter<MyResultData, MainAdapter.Holder>(DiffCallback()) {
     interface ItemClick {
         fun onClickItem(position: Int, item : MyResultData)
     }
@@ -28,7 +28,6 @@ class SearchAdapter(): ListAdapter<MyResultData, SearchAdapter.Holder>(DiffCallb
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = MainRecylcerViewListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return Holder(binding)
     }
 

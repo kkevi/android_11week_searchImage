@@ -74,6 +74,10 @@ class MainViewModel:ViewModel() {
         }
     }
 
+    fun selectedList() : List<MyResultData> {
+        return itemList.value?.filter { it.isSelected } ?: listOf()
+    }
+
     fun loadSearchQuery(pref: SharedPreferences, textField: EditText) {
         textField.setText(pref.getString("search_query",""))
     }

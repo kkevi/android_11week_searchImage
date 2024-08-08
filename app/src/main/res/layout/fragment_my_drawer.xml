@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.fragments.MyDrawerFragment"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_recycler_view2"
