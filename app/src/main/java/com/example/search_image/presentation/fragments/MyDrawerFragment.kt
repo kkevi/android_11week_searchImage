@@ -1,5 +1,6 @@
 package com.example.search_image.presentation.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -49,6 +50,7 @@ class MyDrawerFragment : Fragment() {
 
             // 아이템 눌렀을 때 동작하는 함수
             mainAdapter.itemClick = object : MainAdapter.ItemClick {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onClickItem(position: Int, item: MyResultData) {
                     unselectMyList(position, item)
                     saveMyDrawer(myListPref, selectedList.value ?: listOf())

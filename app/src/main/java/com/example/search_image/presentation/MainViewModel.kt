@@ -42,6 +42,7 @@ class MainViewModel:ViewModel() {
     val selectedList: LiveData<MutableList<MyResultData>> = _selectedList
 
     private val gson = Gson()
+    private var savedData = mutableListOf<MyResultData>()
 
     fun communicateNetWork() = viewModelScope.launch() {
         try {
@@ -70,13 +71,9 @@ class MainViewModel:ViewModel() {
 //        Log.d("그냥 item", "구냥~ ${item.id}, ${item.thumbnailUrl}")
 //        Log.d("itemList", "working~ ${itemList.value?.get(position)?.id}, ${itemList.value?.get(position)?.thumbnailUrl}")
 
-        if(_selectedList.value?.isEmpty() == true){
-            _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
-        } else {
-
-        }
-
-//        itemList.value?.filter {item.isSelected}?.let { _selectedList.value?.addAll(it) }
+//        _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
+        _selectedList.value = (itemList.value?.filter { it.isSelected }?.toMutableList() ?: mutableListOf())
+            .apply { addAll(savedData.distinctBy { it.id }) }
     }
 
     fun unselectMyList(position: Int, item: MyResultData){
@@ -114,6 +111,7 @@ class MainViewModel:ViewModel() {
     fun loadMyDrawer(pref: SharedPreferences) {
         val getFromPref = pref.getString("my_drawer", "[]") ?: "[]"
         val jsonData = gson.fromJson(getFromPref, MySavedData::class.java)
+        savedData = jsonData.itemList.toMutableList()
 
         _selectedList.value = jsonData.itemList.toMutableList()
     }
