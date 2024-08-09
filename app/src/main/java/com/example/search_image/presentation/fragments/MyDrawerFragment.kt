@@ -3,6 +3,7 @@ package com.example.search_image.presentation.fragments
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,11 +39,12 @@ class MyDrawerFragment : Fragment() {
         mainAdapter = MainAdapter()
 
         with(mainViewModel){
+            loadMyDrawer(myListPref)
+            mainAdapter.submitList(selectedList.value)
+
             itemList.observe(viewLifecycleOwner){ itemList ->
                 mainAdapter.submitList(selectedList.value)
             }
-            communicateNetWork()
-            loadMyDrawer(myListPref)
 
 
             // 아이템 눌렀을 때 동작하는 함수

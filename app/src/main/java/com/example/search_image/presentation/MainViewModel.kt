@@ -69,7 +69,13 @@ class MainViewModel:ViewModel() {
         }
 //        Log.d("그냥 item", "구냥~ ${item.id}, ${item.thumbnailUrl}")
 //        Log.d("itemList", "working~ ${itemList.value?.get(position)?.id}, ${itemList.value?.get(position)?.thumbnailUrl}")
-        _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
+
+        if(_selectedList.value?.isEmpty() == true){
+            _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
+        } else {
+
+        }
+
 //        itemList.value?.filter {item.isSelected}?.let { _selectedList.value?.addAll(it) }
     }
 
