@@ -8,68 +8,70 @@
     android:background="@color/white"
     tools:context=".presentation.fragments.SearchFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_container"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+        <EditText
+            android:id="@+id/search_bar_text_field"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:background="@drawable/outlined_textfield"
+            android:hint="@string/search_bar_placeholder"
+            android:inputType="text"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:textSize="16sp" />
+
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_button"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="16dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="2dp"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toEndOf="@+id/search_bar_text_field"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/search_bar_text_field"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:autofillHints=""
-                android:background="@drawable/outlined_textfield"
-                android:hint="@string/search_bar_placeholder"
-                android:inputType="text"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:textSize="16sp" />
+    </LinearLayout>
 
-
-            <Button
-                android:id="@+id/search_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_button"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="2dp"
-                android:text="@string/search"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/search_bar_text_field"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
             android:layout_weight="1"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
