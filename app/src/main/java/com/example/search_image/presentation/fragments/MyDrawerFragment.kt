@@ -1,10 +1,7 @@
 package com.example.search_image.presentation.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +17,6 @@ class MyDrawerFragment : Fragment() {
     private val binding: FragmentMyDrawerBinding by lazy { FragmentMyDrawerBinding.inflate(layoutInflater) }
     private lateinit var mainAdapter: MainAdapter
     private val mainViewModel: MainViewModel by activityViewModels<MainViewModel>()
-//    private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +31,11 @@ class MyDrawerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val myListPref : SharedPreferences = requireContext().getSharedPreferences("my_drawer", Context.MODE_PRIVATE)
-
         mainAdapter = MainAdapter()
 
 
         with(mainViewModel){
-            loadMyDrawer(myListPref)
+            loadMyDrawer()
             mainAdapter.submitList(selectedList.value)
 
             itemList.observe(viewLifecycleOwner){ itemList ->
@@ -54,7 +48,7 @@ class MyDrawerFragment : Fragment() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onClickItem(position: Int, item: MyResultData) {
                     unselectMyList(item)
-                    saveMyDrawer(myListPref, selectedList.value ?: listOf())
+                    saveMyDrawer(selectedList.value ?: listOf())
                     mainAdapter.notifyDataSetChanged()
                 }
             }

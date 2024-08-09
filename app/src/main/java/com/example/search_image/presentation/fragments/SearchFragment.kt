@@ -1,13 +1,10 @@
 package com.example.search_image.presentation.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.search_image.data.model.MyResultData
@@ -33,10 +30,6 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val qeuryPref : SharedPreferences = requireContext().getSharedPreferences("search_query", Context.MODE_PRIVATE)
-        val myListPref : SharedPreferences = requireContext().getSharedPreferences("my_drawer", Context.MODE_PRIVATE)
-
         mainAdapter = MainAdapter()
 
         with(mainViewModel){
@@ -44,21 +37,21 @@ class SearchFragment : Fragment() {
                 mainAdapter.submitList(mainViewModel.itemList.value)
             }
             // 검색어 불러오기
-            loadSearchQuery(qeuryPref, binding.searchBarTextField)
+            loadSearchQuery(binding.searchBarTextField)
 
             // 아이템 눌렀을 때 동작하는 함수
             mainAdapter.itemClick = object : MainAdapter.ItemClick {
                 override fun onClickItem(position: Int, item: MyResultData) {
                     selectMyList(position)
-                    saveMyDrawer(myListPref, selectedList.value ?: listOf())
+                    saveMyDrawer(selectedList.value ?: listOf())
                 }
             }
 
             with(binding){
                 // 검색버튼 눌렀을 때 동작하는 함수
                 searchButton.setOnClickListener {
-                    onSearchQeury(searchBarTextField.text.toString(), inputMethodManager, view)
-                    saveSearchQuery(qeuryPref, searchBarTextField.text.toString())
+                    onSearchQeury(searchBarTextField.text.toString(), view)
+                    saveSearchQuery(searchBarTextField.text.toString())
                     communicateNetWork()
                 }
 
