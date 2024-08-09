@@ -1,5 +1,6 @@
 package com.example.search_image.presentation
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.search_image.data.model.ImageDocument
 import com.example.search_image.data.model.ImageResultData
@@ -16,14 +18,13 @@ import com.example.search_image.data.model.MySavedData
 import com.example.search_image.network.NetworkClient
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import java.util.Locale
 import java.util.UUID
 
 // 정우님이 도와주신 코드~~
 fun List<ImageDocument>.toMyData(): List<MyResultData> {
     return this.map{
         MyResultData(
-            UUID.randomUUID().toString().toUpperCase(Locale.ROOT),
+            UUID.randomUUID().toString(),
             it.datetime,
             it.displaySitename,
             it.thumbnailUrl,
@@ -31,11 +32,11 @@ fun List<ImageDocument>.toMyData(): List<MyResultData> {
     }
 }
 
-class MainViewModel:ViewModel() {
+class MainViewModel() :ViewModel() {
     private val _itemList = MutableLiveData<List<MyResultData>>()
     val itemList: LiveData<List<MyResultData>> = _itemList
 
-    private val _searchQuery = MutableLiveData<String>("")
+    private val _searchQuery = MutableLiveData("")
     val searchQuery: LiveData<String> get() = _searchQuery
 
     private val _selectedList = MutableLiveData<MutableList<MyResultData>>()
@@ -48,18 +49,13 @@ class MainViewModel:ViewModel() {
         try {
             val responseData: ImageResultData? = NetworkClient.searchImageNetwork.getSearchResultList(query = searchQuery.value ?: "") //내가 만들어둔 interface 호출
             _itemList.postValue(responseData?.documents?.toMyData())
+            _itemList.value?.sortedByDescending{it.datetime} //이거 왜 안 됨...?
         } catch (e: Exception) {
-            // 에러 처리
+            Log.d("❗️ communicateNetWork error", e.message.toString())
         }
     }
 
-    fun selectMyList(position : Int, item: MyResultData) {
-//        selectedList.add(item.copy(isSelected = true))
-//        _isSelectedList.value = selectedList
-
-//        _isSelectedList.postValue(listOf(item.copy(isSelected = true))) << postValue 쓰면 즉각적인 반영이 안 됨
-
-
+    fun selectMyList(position : Int) {
         // 명선님이 도와주신 코드~~
         _itemList.value = _itemList.value?.mapIndexed{ index, item ->
             if(position == index) {
@@ -68,15 +64,12 @@ class MainViewModel:ViewModel() {
                 item.copy()
             }
         }
-//        Log.d("그냥 item", "구냥~ ${item.id}, ${item.thumbnailUrl}")
-//        Log.d("itemList", "working~ ${itemList.value?.get(position)?.id}, ${itemList.value?.get(position)?.thumbnailUrl}")
 
-//        _selectedList.value = itemList.value?.filter { it.isSelected }?.toMutableList()
         _selectedList.value = (itemList.value?.filter { it.isSelected }?.toMutableList() ?: mutableListOf())
             .apply { addAll(savedData.distinctBy { it.id }) }
     }
 
-    fun unselectMyList(position: Int, item: MyResultData){
+    fun unselectMyList(item: MyResultData){
         _selectedList.value?.remove(item)
     }
 

@@ -80,6 +80,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
         android:backgroundTint="@color/primary"
+        android:contentDescription="topButton"
         android:foreground="@drawable/arrow_upward"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"

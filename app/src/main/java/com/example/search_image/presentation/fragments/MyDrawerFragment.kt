@@ -39,6 +39,7 @@ class MyDrawerFragment : Fragment() {
 
         mainAdapter = MainAdapter()
 
+
         with(mainViewModel){
             loadMyDrawer(myListPref)
             mainAdapter.submitList(selectedList.value)
@@ -52,7 +53,7 @@ class MyDrawerFragment : Fragment() {
             mainAdapter.itemClick = object : MainAdapter.ItemClick {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onClickItem(position: Int, item: MyResultData) {
-                    unselectMyList(position, item)
+                    unselectMyList(item)
                     saveMyDrawer(myListPref, selectedList.value ?: listOf())
                     mainAdapter.notifyDataSetChanged()
                 }

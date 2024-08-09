@@ -19,7 +19,6 @@ class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private lateinit var mainAdapter: MainAdapter
     private val mainViewModel: MainViewModel by activityViewModels<MainViewModel>()
-//    private val mainViewModel: MainViewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +49,7 @@ class SearchFragment : Fragment() {
             // 아이템 눌렀을 때 동작하는 함수
             mainAdapter.itemClick = object : MainAdapter.ItemClick {
                 override fun onClickItem(position: Int, item: MyResultData) {
-                    selectMyList(position, item)
+                    selectMyList(position)
                     saveMyDrawer(myListPref, selectedList.value ?: listOf())
                 }
             }
@@ -61,6 +60,10 @@ class SearchFragment : Fragment() {
                     onSearchQeury(searchBarTextField.text.toString(), inputMethodManager, view)
                     saveSearchQuery(qeuryPref, searchBarTextField.text.toString())
                     communicateNetWork()
+                }
+
+                btnTop.setOnClickListener {
+                    mainRecyclerView.smoothScrollToPosition(0)
                 }
 
                 mainRecyclerView.apply {
@@ -83,7 +86,6 @@ class SearchFragment : Fragment() {
             }
     }
 }
-
 
 //    class GridSpaceItemDecoration(private val spanCount: Int, private val space: Int) : RecyclerView.ItemDecoration() {
 //
