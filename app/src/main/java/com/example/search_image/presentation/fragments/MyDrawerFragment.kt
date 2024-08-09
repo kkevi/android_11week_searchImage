@@ -51,6 +51,8 @@ class MyDrawerFragment : Fragment() {
             mainAdapter.itemClick = object : MainAdapter.ItemClick {
                 override fun onClickItem(position: Int, item: MyResultData) {
                     unselectMyList(position, item)
+                    saveMyDrawer(myListPref, selectedList.value ?: listOf())
+                    mainAdapter.notifyDataSetChanged()
                 }
             }
         }
