@@ -41,7 +41,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val itemList: LiveData<List<MyResultData>> = _itemList
 
     private val _searchQuery = MutableLiveData("")
-    private val searchQuery: LiveData<String> get() = _searchQueryg
+    private val searchQuery: LiveData<String> get() = _searchQuery
 
     private val _selectedList = MutableLiveData<MutableList<MyResultData>>()
     val selectedList: LiveData<MutableList<MyResultData>> = _selectedList
